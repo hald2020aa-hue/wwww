@@ -50,9 +50,9 @@ jobs:
           echo "Using sdkmanager from: $SDKMANAGER"
           if [ -n "$SDKMANAGER" ] && [ -x "$SDKMANAGER" ]; then
             yes | "$SDKMANAGER" --licenses > /dev/null 2>&1 || true
-            echo "Installing platforms;android-36 from Canary channel..."
-            echo "y" | "$SDKMANAGER" --channel=3 "platforms;android-36" || true
-            echo "y" | "$SDKMANAGER" "platforms;android-35" "build-tools;35.0.0" || true
+            echo "Installing platforms;android-36 and build-tools;36.0.0 from Canary channel..."
+            echo "y" | "$SDKMANAGER" --channel=3 "platforms;android-36" "build-tools;36.0.0" || true
+            echo "y" | "$SDKMANAGER" "platforms;android-35" "build-tools;35.0.0" "platform-tools" || true
           fi
 
       - name: Make Gradle Wrapper Executable
@@ -70,23 +70,21 @@ jobs:
           fi
           echo "Validating keystore..."
           keytool -list -keystore debug.keystore -storepass android
+          cp debug.keystore app/debug.keystore 2>/dev/null || true
 
       - name: Build Debug APK
         run: |
-          ./gradlew :app:assembleDebug --no-daemon --stacktrace 2>&1 | tee build.log || {
-            echo "==================== BUILD ERROR SUMMARY ===================="
-            grep -A 25 "\* What went wrong:" build.log || tail -n 60 build.log
-            exit 1
-          }
+          set -o pipefail
+          ./gradlew :app:assembleDebug --no-daemon --stacktrace 2>&1 | tee build.log
 
       - name: Prepare APK Output
         run: |
           mkdir -p build_output
           echo "Locating generated APK files..."
           find . -name "*.apk" -type f
-          APK_FILE=$(find app/build/outputs -name "*.apk" -type f | grep -i "debug" | head -n 1)
+          APK_FILE=$(find app/build/outputs -name "*debug*.apk" -type f | head -n 1)
           if [ -z "$APK_FILE" ]; then
-            APK_FILE=$(find . -name "*.apk" -type f | grep -i "debug" | head -n 1)
+            APK_FILE=$(find . -name "*debug*.apk" -type f | head -n 1)
           fi
           if [ -z "$APK_FILE" ]; then
             APK_FILE=$(find . -name "*.apk" -type f | head -n 1)
@@ -97,6 +95,8 @@ jobs:
             ls -lh build_output/SSS-X-Debug.apk
           else
             echo "ERROR: No APK file was found after assembleDebug!"
+            echo "--- Last 100 lines of build.log ---"
+            tail -n 100 build.log 2>/dev/null || true
             exit 1
           fi
 
