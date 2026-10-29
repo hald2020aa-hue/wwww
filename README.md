@@ -1,24 +1,63 @@
-# Kotatsu Manga Reader (Jetpack Compose Edition)
+# SSS X — قارئ المانجا والقصص المصورة النيون المتطور
 
-A modern, fast, and feature-rich manga and comic reader built with Kotlin and Jetpack Compose for Android.
+تطبيق **SSS X** هو قارئ مانجا متقدم واحترافي مبني بالكامل باستخدام **Jetpack Compose** و **Material Design 3** بأحدث تقنيات أندرويد الحديثة. تم تصميمه مع دعم كامل للغة العربية والاتجاه من اليمين لليسار (RTL) مع 12 ثيم نيون عصري ومحرك ترجمة فوري مدمج داخل القارئ.
 
-## Features
+---
 
-- **Personal Library & Categories**: Organize your collection into custom categories (Reading, Plan to Read, Completed, Favorites).
-- **Online Catalog & Live Search**: Browse trending titles, latest updates, and search across MangaDex and online sources in real-time.
-- **Full-Featured Reader**:
-  - **Webtoon Mode**: Continuous vertical scrolling for long-strip webcomics.
-  - **Paged Modes**: Traditional Right-to-Left (Japanese Manga) and Left-to-Right (Western Comics).
-  - **Reader Controls**: Interactive page scrubber slider, chapter switcher, and page bookmarking.
-  - **Customizable Appearance**: OLED Pure Black, Dark Gray, and White backgrounds with keep-awake toggle.
-- **Reading History & Resumption**: Chronological progress tracking with percentage bars and instant 1-tap "Resume" action.
-- **Bookmarks & Offline Downloads**: Bookmark favorite scenes and download full chapters for offline reading.
-- **Modern Architecture**: Clean MVVM architecture with Kotlin Coroutines, StateFlow, Material Design 3, and Coil image loading.
+## 🌟 المميزات الرئيسية (Key Features)
 
-## Tech Stack
+- **واجهة نيون عصرية بتصميم مستقبلي (Futuristic Neon UI):**
+  - مستوحاة بالكامل من صور التصميم الأصلية.
+  - 12 ثيم نيون جاهز (Electric Blue, Neon Purple, Cyberpunk Pink, Emerald Green, Neon Red, Golden Amber, Ice Cyan, Toxic Lime, Aurora, Galaxy, Cyber Blue-Pink, Monochrome Neon).
+  - إمكانية تخصيص الألوان الأساسية والثانوية يدويًا بمحدد ألوان حي.
+  - تطبيق فوري للثيمات بدون إعادة تشغيل التطبيق.
 
-- **UI**: Jetpack Compose & Material 3
-- **Language**: Kotlin 2.2
-- **Image Loading**: Coil Compose
-- **Networking**: OkHttp
-- **Data Serialization**: Kotlinx Serialization & JSON
+- **ترجمة فورية ذكية داخل القارئ (In-Reader Real-Time Translation):**
+  - ترجمة مباشرة للصفحات من الإنجليزية، اليابانية، الكورية، والصينية إلى اللغة العربية.
+  - إمكانية التفعيل والتعطيل بلمسة واحدة من شريط أدوات القارئ وقائمة الإعدادات.
+  - عرض طبقة نصية عربية متراكبة فوق الفقاعات الحوارية مع إمكانية تعديل الشفافية وتوسيط النصوص.
+
+- **قارئ متطور متعدد الأوضاع (Advanced Reader):**
+  - وضع التمرير العمودي المستمر (Webtoon).
+  - وضع القراءة من اليمين لليسار (المانجا اليابانية).
+  - وضع القراءة من اليسار لليمين والصفحات المزدوجة.
+  - التحكم بالإيماءات، أزرار الصوت، شريط تقدم شفاف، وحفظ الصفحة تلقائيًا.
+
+- **المكتبة والمفضلة والسجل (Library, Favorites & History):**
+  - تصنيف المانجا وإدارتها بسهولة.
+  - تتبع دقيق لنسبة تقدم القراءة واستئناف فوري من آخر صفحة.
+  - فلاتر وتصنيفات مرنة.
+
+- **تنزيل الفصول والنسخ الاحتياطي:**
+  - إدارة الفصول المحملة للقراءة في أي وقت دون اتصال بالإنترنت.
+  - تصدير واستيراد النسخ الاحتياطية وحفظ البيانات.
+
+---
+
+## 🚀 البناء التلقائي عبر GitHub Actions (Building on GitHub)
+
+المشروع مجهز بالكامل بملف سير عمل أوتوماتيكي عبر **GitHub Actions** لبناء ملف التثبيت **APK** بنقرة واحدة:
+
+### طريقة البناء والتنزيل من GitHub:
+
+1. **دفع التغييرات (Push):**
+   - بمجرد رفع التغييرات على أي فرع (`main`, `master`, `devel`)، سيبدأ البناء تلقائيًا.
+2. **التشغيل اليدوي (Manual Trigger):**
+   - انتقل إلى تبويب **Actions** في مستودع GitHub الخاص بك.
+   - اختر سير العمل: **`Build SSS X Android APK`**.
+   - اضغط على **Run workflow**.
+3. **تنزيل ملف الـ APK (Download):**
+   - بعد انتهاء البناء بنجاح (خلال دقيقة إلى دقيقتين)، ستجد ملف الـ APK جاهزاً للتنزيل في قسم **Artifacts** باسم **`SSS-X-Debug-APK`**.
+4. **الإصدارات التلقائية (Releases):**
+   - عند إنشاء وسم جديد (مثلاً `v1.0.0`)، سيقوم GitHub بإنشاء Release رسمي وإرفاق ملف `app-debug.apk` تلقائيًا.
+
+---
+
+## 🛠️ التقنيات المستخدمة (Tech Stack)
+
+- **Framework:** Android SDK (API 36 / Android 16 Ready)
+- **UI Toolkit:** Jetpack Compose (Kotlin 2.2, Material 3)
+- **Architecture:** Clean MVVM Architecture with Kotlin Coroutines & StateFlow
+- **Image Loading:** Coil Compose
+- **Networking:** OkHttp
+- **Serialization:** Kotlinx Serialization
