@@ -26,6 +26,13 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
+      - name: Clean Legacy Sources
+        run: |
+          echo "Cleaning legacy debug/test sources from checkout..."
+          rm -rf app/src/debug app/src/androidTest app/src/test app/src/main/kotlin_new
+          echo "Current sources in app/src:"
+          find app/src -maxdepth 3 || true
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -77,9 +84,13 @@ jobs:
           set -o pipefail
           ./gradlew :app:assembleDebug --no-daemon 2>&1 | tee build.log || {
             echo "=========================================================="
-            echo "============= BUILD FAILED: ERROR DETAILS ================"
+            echo "============= COMPILATION ERROR DETAILS =================="
             echo "=========================================================="
-            grep -B 2 -A 35 "FAILURE: Build failed" build.log || tail -n 50 build.log
+            grep -E "^e: " build.log | head -n 40 || true
+            echo "=========================================================="
+            echo "============= GRADLE FAILURE SUMMARY ====================="
+            echo "=========================================================="
+            grep -B 15 -A 25 "FAILURE: Build failed" build.log || tail -n 50 build.log
             echo "=========================================================="
             exit 1
           }

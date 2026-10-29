@@ -49,6 +49,15 @@ android {
         compose = true
     }
 
+    sourceSets {
+        getByName("main") {
+            java.setSrcDirs(listOf("src/main/kotlin"))
+        }
+        getByName("debug") {
+            java.setSrcDirs(emptyList<String>())
+        }
+    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
