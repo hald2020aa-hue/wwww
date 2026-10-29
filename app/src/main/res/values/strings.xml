@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SSS X</string>
+    <string name="library">المفضلة</string>
+    <string name="explore">استكشف</string>
+    <string name="history">السجل</string>
+    <string name="feed">الموجز</string>
+    <string name="settings">إعدادات</string>
+</resources>

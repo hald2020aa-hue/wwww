@@ -1,0 +1,8 @@
+{
+  "name": "SSS X",
+  "description": "تطبيق SSS X الاحترافي لقراءة المانجا والكومكس بمظهر نيون مستقبلي وترجمة فورية للعربية ومصادر متعددة",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

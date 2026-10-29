@@ -1,11 +1,24 @@
-<div align="center">
+# Kotatsu Manga Reader (Jetpack Compose Edition)
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+A modern, fast, and feature-rich manga and comic reader built with Kotlin and Jetpack Compose for Android.
 
-  <h1>Built with AI Studio</h2>
+## Features
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+- **Personal Library & Categories**: Organize your collection into custom categories (Reading, Plan to Read, Completed, Favorites).
+- **Online Catalog & Live Search**: Browse trending titles, latest updates, and search across MangaDex and online sources in real-time.
+- **Full-Featured Reader**:
+  - **Webtoon Mode**: Continuous vertical scrolling for long-strip webcomics.
+  - **Paged Modes**: Traditional Right-to-Left (Japanese Manga) and Left-to-Right (Western Comics).
+  - **Reader Controls**: Interactive page scrubber slider, chapter switcher, and page bookmarking.
+  - **Customizable Appearance**: OLED Pure Black, Dark Gray, and White backgrounds with keep-awake toggle.
+- **Reading History & Resumption**: Chronological progress tracking with percentage bars and instant 1-tap "Resume" action.
+- **Bookmarks & Offline Downloads**: Bookmark favorite scenes and download full chapters for offline reading.
+- **Modern Architecture**: Clean MVVM architecture with Kotlin Coroutines, StateFlow, Material Design 3, and Coil image loading.
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+## Tech Stack
 
-</div>
+- **UI**: Jetpack Compose & Material 3
+- **Language**: Kotlin 2.2
+- **Image Loading**: Coil Compose
+- **Networking**: OkHttp
+- **Data Serialization**: Kotlinx Serialization & JSON
