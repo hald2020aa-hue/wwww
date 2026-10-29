@@ -52,9 +52,19 @@ android {
     sourceSets {
         getByName("main") {
             java.setSrcDirs(listOf("src/main/kotlin"))
+            kotlin.setSrcDirs(listOf("src/main/kotlin"))
         }
         getByName("debug") {
             java.setSrcDirs(emptyList<String>())
+            kotlin.setSrcDirs(emptyList<String>())
+        }
+        getByName("test") {
+            java.setSrcDirs(emptyList<String>())
+            kotlin.setSrcDirs(emptyList<String>())
+        }
+        getByName("androidTest") {
+            java.setSrcDirs(emptyList<String>())
+            kotlin.setSrcDirs(emptyList<String>())
         }
     }
 
