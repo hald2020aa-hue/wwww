@@ -75,7 +75,14 @@ jobs:
       - name: Build Debug APK
         run: |
           set -o pipefail
-          ./gradlew :app:assembleDebug --no-daemon --stacktrace 2>&1 | tee build.log
+          ./gradlew :app:assembleDebug --no-daemon 2>&1 | tee build.log || {
+            echo "=========================================================="
+            echo "============= BUILD FAILED: ERROR DETAILS ================"
+            echo "=========================================================="
+            grep -B 2 -A 35 "FAILURE: Build failed" build.log || tail -n 50 build.log
+            echo "=========================================================="
+            exit 1
+          }
 
       - name: Prepare APK Output
         run: |
