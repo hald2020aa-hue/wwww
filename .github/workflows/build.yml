@@ -31,30 +31,35 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-          cache: gradle
 
-      - name: Setup Android SDK Environment & Accept Licenses
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Grant SDK Permissions & Accept Licenses
         run: |
-          echo "Setting up Android SDK environment and accepting licenses..."
+          echo "Granting runner write permissions to Android SDK directory..."
+          sudo chown -R $USER:$GROUP /usr/local/lib/android/sdk
           mkdir -p "$ANDROID_HOME/licenses" || true
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null 2>&1 || true
-          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platforms;android-36" "build-tools;35.0.0" || true
+          echo "Ensuring platform 36 is installed..."
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;35.0.0" || true
 
       - name: Make Gradle Wrapper Executable
         run: chmod +x ./gradlew
 
-      - name: Ensure Debug Keystore
+      - name: Ensure Valid Debug Keystore
         run: |
-          if [ ! -f "debug.keystore" ]; then
-            if [ -f "debug.keystore.base64" ]; then
-              base64 -d debug.keystore.base64 > debug.keystore
-            else
-              keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
-            fi
+          if [ -f "debug.keystore.base64" ]; then
+            base64 -d -i debug.keystore.base64 > debug.keystore 2>/dev/null || true
+          fi
+          if [ ! -f "debug.keystore" ] || ! keytool -list -keystore debug.keystore -storepass android > /dev/null 2>&1; then
+            echo "Generating fallback debug keystore..."
+            rm -f debug.keystore
+            keytool -genkeypair -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
           fi
 
       - name: Build Debug APK
-        run: ./gradlew :app:assembleDebug --stacktrace --no-daemon
+        run: ./gradlew :app:assembleDebug --stacktrace
 
       - name: Prepare APK Output
         run: |
