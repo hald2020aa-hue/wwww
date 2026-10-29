@@ -59,7 +59,7 @@ jobs:
           fi
 
       - name: Build Debug APK
-        run: ./gradlew :app:assembleDebug --stacktrace
+        run: ./gradlew :app:assembleDebug --no-daemon --stacktrace
 
       - name: Prepare APK Output
         run: |
