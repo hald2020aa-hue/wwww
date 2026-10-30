@@ -10,8 +10,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.koitharu.kotatsu.data.model.*
 import org.koitharu.kotatsu.data.translation.MangaTranslator
+import org.koitharu.kotatsu.data.model.Manga
+import org.koitharu.kotatsu.data.model.Chapter
+import org.koitharu.kotatsu.data.model.Category
+import org.koitharu.kotatsu.data.model.MangaSource
+import org.koitharu.kotatsu.data.model.HistoryItem
+import org.koitharu.kotatsu.data.model.Bookmark
+import org.koitharu.kotatsu.data.model.MangaPage
+import org.koitharu.kotatsu.data.model.MangaStatus
+import org.koitharu.kotatsu.data.model.ReaderSettings
+import org.koitharu.kotatsu.data.model.NeonThemeId
+import org.koitharu.kotatsu.data.model.NeonColorPalette
+import org.koitharu.kotatsu.data.model.NeonThemes
+import org.koitharu.kotatsu.data.model.*
 import org.koitharu.kotatsu.data.translation.TranslatedBubble
 import java.io.File
 

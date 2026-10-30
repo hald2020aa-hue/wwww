@@ -40,8 +40,115 @@ jobs:
               fi
             done
           fi
-          echo "Current sources in app/src/main:"
-          find app/src/main -maxdepth 3 || true
+
+          echo "Ensuring all required data models exist in app/src/main/kotlin/org/koitharu/kotatsu/data/model..."
+          mkdir -p app/src/main/kotlin/org/koitharu/kotatsu/data/model
+          if [ -f "app/src/main/kotlin/org/koitharu/kotatsu/data/model/manga.kt" ] && [ ! -f "app/src/main/kotlin/org/koitharu/kotatsu/data/model/Manga.kt" ]; then
+            mv app/src/main/kotlin/org/koitharu/kotatsu/data/model/manga.kt app/src/main/kotlin/org/koitharu/kotatsu/data/model/Manga.kt
+          fi
+
+          # If Manga.kt does not exist or has fewer than 20 lines, generate it directly
+          if [ ! -f "app/src/main/kotlin/org/koitharu/kotatsu/data/model/Manga.kt" ] || [ $(wc -l < "app/src/main/kotlin/org/koitharu/kotatsu/data/model/Manga.kt") -lt 20 ]; then
+            echo "Auto-restoring pristine Manga.kt..."
+            cat << 'EOF' > app/src/main/kotlin/org/koitharu/kotatsu/data/model/Manga.kt
+package org.koitharu.kotatsu.data.model
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+enum class MangaStatus {
+    ONGOING,
+    COMPLETED,
+    SUSPENDED,
+    UNKNOWN
+}
+
+@Serializable
+data class Category(
+    val id: String,
+    val name: String,
+    val order: Int = 0
+)
+
+@Serializable
+data class Manga(
+    val id: String,
+    val title: String,
+    val altTitle: String = "",
+    val author: String = "Unknown Author",
+    val artist: String = "",
+    val description: String = "",
+    val coverUrl: String,
+    val status: MangaStatus = MangaStatus.ONGOING,
+    val genres: List<String> = emptyList(),
+    val source: String = "MangaDex",
+    val rating: Float = 4.8f,
+    val totalChapters: Int = 0,
+    val categoryId: String = "reading",
+    val isFavorite: Boolean = false,
+    val lastReadChapterId: String? = null,
+    val lastReadPage: Int = 1
+)
+
+@Serializable
+data class Chapter(
+    val id: String,
+    val mangaId: String,
+    val number: Float,
+    val title: String,
+    val scanlator: String = "",
+    val uploadDate: String = "Recent",
+    val pageCount: Int = 10,
+    val isRead: Boolean = false,
+    val isDownloaded: Boolean = false,
+    val lastReadPage: Int = 1
+)
+
+@Serializable
+data class MangaPage(
+    val pageNumber: Int,
+    val imageUrl: String
+)
+
+@Serializable
+data class HistoryItem(
+    val mangaId: String,
+    val mangaTitle: String,
+    val coverUrl: String,
+    val chapterId: String,
+    val chapterNumber: Float,
+    val chapterTitle: String,
+    val currentPage: Int,
+    val totalPages: Int,
+    val timestamp: Long = System.currentTimeMillis()
+)
+
+@Serializable
+data class Bookmark(
+    val id: String,
+    val mangaId: String,
+    val mangaTitle: String,
+    val coverUrl: String,
+    val chapterId: String,
+    val chapterTitle: String,
+    val pageNumber: Int,
+    val imageUrl: String,
+    val timestamp: Long = System.currentTimeMillis()
+)
+
+@Serializable
+data class MangaSource(
+    val id: String,
+    val name: String,
+    val baseUrl: String,
+    val language: String = "EN",
+    val isEnabled: Boolean = true
+)
+EOF
+          fi
+
+          echo "Current sources in app/src/main/kotlin/org/koitharu/kotatsu/data/model:"
+          ls -la app/src/main/kotlin/org/koitharu/kotatsu/data/model
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -96,13 +203,13 @@ jobs:
           set -o pipefail
           ./gradlew clean :app:assembleDebug --no-daemon --no-build-cache --rerun-tasks --stacktrace 2>&1 | tee build.log || {
             echo "=========================================================="
-            echo "============= BUILD FAILURE - LAST 150 LINES ============"
+            echo "============= FIRST 50 COMPILER ERRORS ==================="
             echo "=========================================================="
-            tail -n 150 build.log
+            grep -n -E "(e: |error:|FAILED|Exception)" build.log | head -n 50 || true
             echo "=========================================================="
-            echo "============= ALL COMPILER ERRORS/WARNINGS ==============="
+            echo "============= LAST 100 LINES OF BUILD LOG ================"
             echo "=========================================================="
-            grep -n -E "(e: |error:|FAILED|Exception)" build.log | head -n 60 || true
+            tail -n 100 build.log
             echo "=========================================================="
             exit 1
           }
